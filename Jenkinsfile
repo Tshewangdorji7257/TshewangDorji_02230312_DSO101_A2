@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         DOCKER_HUB_REPO = 'tshewang7'  // Docker Hub username
-        DOCKER_IMAGE_BACKEND = "${DOCKER_HUB_REPO}/todo-backend:${BUILD_NUMBER}"
-        DOCKER_IMAGE_FRONTEND = "${DOCKER_HUB_REPO}/todo-frontend:${BUILD_NUMBER}"
+        DOCKER_IMAGE_BACKEND = "tshewang7/todo-jenkins-backend:${BUILD_NUMBER}"
+        DOCKER_IMAGE_FRONTEND = "tshewang7/todo-jenkins-frontend:${BUILD_NUMBER}"
         GITHUB_REPO = 'https://github.com/Tshewangdorji7257/TshewangDorji_02230312_DSO101_A2.git'
     }
 
