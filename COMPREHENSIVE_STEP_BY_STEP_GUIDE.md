@@ -253,9 +253,11 @@ Now you need to install special plugins for your CI/CD pipeline.
 - Check the box
 - Scroll down, click **Install without restart**
 
-**Plugin 2: Pipeline**
+**Plugin 2: Pipeline (Core)**
 - Search for: `pipeline`
-- Find: **Pipeline**
+- Find: **Pipeline** (NOT "Pipeline Graph Analysis", "Pipeline: REST API", or "Pipeline: Stage View")
+- Look for the one that says **"Pipeline"** with blue icon
+- This is the core Pipeline plugin - essential for Declarative Pipelines
 - Check the box
 
 **Plugin 3: GitHub Integration**
