@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_REPO = 'your-dockerhub-username'  // Replace with your Docker Hub username
+        DOCKER_HUB_REPO = 'tshewang7'  // Docker Hub username
         DOCKER_IMAGE_BACKEND = "${DOCKER_HUB_REPO}/todo-backend:${BUILD_NUMBER}"
         DOCKER_IMAGE_FRONTEND = "${DOCKER_HUB_REPO}/todo-frontend:${BUILD_NUMBER}"
         GITHUB_REPO = 'https://github.com/Tshewangdorji7257/TshewangDorji_02230312_DSO101_A2.git'
@@ -93,17 +93,17 @@ pipeline {
             steps {
                 echo '📤 Pushing images to Docker Hub...'
                 script {
-                    try {
-                        withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                            bat 'echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin'
-                            bat 'docker push %DOCKER_IMAGE_BACKEND%'
-                            bat 'docker push %DOCKER_IMAGE_FRONTEND%'
-                            echo '✅ Images pushed to Docker Hub'
-                        }
-                    } catch (Exception e) {
-                        echo '⚠️ Docker Hub credentials not configured. Skipping push stage.'
-                        echo '📸 Docker images built locally: %DOCKER_IMAGE_BACKEND% and %DOCKER_IMAGE_FRONTEND%'
-                        echo 'To push to Docker Hub, configure docker-hub-creds in Jenkins'
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        bat '''@echo off
+                        echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
+                        if errorlevel 1 (
+                            echo Docker login failed!
+                            exit /b 1
+                        )
+                        docker push %DOCKER_IMAGE_BACKEND%
+                        docker push %DOCKER_IMAGE_FRONTEND%
+                        echo ✅ Images pushed to Docker Hub
+                        '''
                     }
                 }
             }
