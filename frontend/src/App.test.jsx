@@ -28,7 +28,7 @@ describe('Utility Functions', () => {
     
     const testDate = '2024-01-15';
     const result = formatDate(testDate);
-    expect(result).toContain('2024') || expect(result).toContain('01') || expect(result).toContain('15');
+    expect(result).toMatch(/1\/15\/2024/);
   });
 
   test('should handle object manipulation', () => {
@@ -85,7 +85,7 @@ describe('Validation Functions', () => {
 
   test('should validate task title length', () => {
     const isValidTitle = (title) => {
-      return title && title.length > 0 && title.length <= 100;
+      return !!(title && title.length > 0 && title.length <= 100);
     };
 
     expect(isValidTitle('Valid Task')).toBe(true);
