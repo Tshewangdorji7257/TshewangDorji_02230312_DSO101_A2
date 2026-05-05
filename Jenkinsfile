@@ -93,11 +93,17 @@ pipeline {
             steps {
                 echo '📤 Pushing images to Docker Hub...'
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        bat 'echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin'
-                        bat 'docker push %DOCKER_IMAGE_BACKEND%'
-                        bat 'docker push %DOCKER_IMAGE_FRONTEND%'
-                        echo '✅ Images pushed to Docker Hub'
+                    try {
+                        withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                            bat 'echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin'
+                            bat 'docker push %DOCKER_IMAGE_BACKEND%'
+                            bat 'docker push %DOCKER_IMAGE_FRONTEND%'
+                            echo '✅ Images pushed to Docker Hub'
+                        }
+                    } catch (Exception e) {
+                        echo '⚠️ Docker Hub credentials not configured. Skipping push stage.'
+                        echo '📸 Docker images built locally: %DOCKER_IMAGE_BACKEND% and %DOCKER_IMAGE_FRONTEND%'
+                        echo 'To push to Docker Hub, configure docker-hub-creds in Jenkins'
                     }
                 }
             }
