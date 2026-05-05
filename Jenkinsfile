@@ -25,7 +25,7 @@ pipeline {
             steps {
                 echo '🔧 Installing backend dependencies...'
                 dir('backend') {
-                    sh 'npm install'
+                    bat 'npm install'
                 }
             }
         }
@@ -34,7 +34,7 @@ pipeline {
             steps {
                 echo '🔧 Installing frontend dependencies...'
                 dir('frontend') {
-                    sh 'npm install'
+                    bat 'npm install'
                 }
             }
         }
@@ -43,7 +43,7 @@ pipeline {
             steps {
                 echo '🏗️ Building frontend application...'
                 dir('frontend') {
-                    sh 'npm run build'
+                    bat 'npm run build'
                 }
             }
         }
@@ -52,7 +52,7 @@ pipeline {
             steps {
                 echo '✅ Running backend tests...'
                 dir('backend') {
-                    sh 'npm test'
+                    bat 'npm test'
                 }
             }
             post {
@@ -67,7 +67,7 @@ pipeline {
             steps {
                 echo '✅ Running frontend tests...'
                 dir('frontend') {
-                    sh 'npm test'
+                    bat 'npm test'
                 }
             }
             post {
@@ -82,8 +82,8 @@ pipeline {
             steps {
                 echo '🐳 Building Docker images...'
                 script {
-                    sh 'docker build -t ${DOCKER_IMAGE_BACKEND} -f backend/Dockerfile .'
-                    sh 'docker build -t ${DOCKER_IMAGE_FRONTEND} -f frontend/Dockerfile .'
+                    bat 'docker build -t %DOCKER_IMAGE_BACKEND% -f backend/Dockerfile .'
+                    bat 'docker build -t %DOCKER_IMAGE_FRONTEND% -f frontend/Dockerfile .'
                     echo '✅ Docker images built successfully'
                 }
             }
@@ -94,9 +94,9 @@ pipeline {
                 echo '📤 Pushing images to Docker Hub...'
                 script {
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                        sh 'docker push ${DOCKER_IMAGE_BACKEND}'
-                        sh 'docker push ${DOCKER_IMAGE_FRONTEND}'
+                        bat 'echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin'
+                        bat 'docker push %DOCKER_IMAGE_BACKEND%'
+                        bat 'docker push %DOCKER_IMAGE_FRONTEND%'
                         echo '✅ Images pushed to Docker Hub'
                     }
                 }
